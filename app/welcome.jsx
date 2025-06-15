@@ -8,7 +8,7 @@ import { hp, wp } from '../helpers/common'
 
 const welcome = ()=> {
 
-const router= useRouter();
+const router = useRouter();
 
   return (
     <ScreenWrapper bg="white">

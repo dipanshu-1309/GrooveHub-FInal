@@ -1,5 +1,4 @@
-import React from 'react'
-import { View, Text, Pressable, StyleSheet } from 'react-native'
+import { Pressable, StyleSheet } from 'react-native'
 import Icon from '../assets/icons'
 import { theme } from '../constants/theme'
 
