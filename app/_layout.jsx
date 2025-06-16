@@ -33,6 +33,8 @@ if (session){
 
 setAuth(session?.user);
 updateUserData(session?.user, session?.user?.email);
+// console.log('auth user: ', session?.user?.email);
+
        router.replace('/home');
 }else{
   // set auth null
