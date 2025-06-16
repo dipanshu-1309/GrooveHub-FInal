@@ -31,7 +31,12 @@ const Login=()=> {
     setLoading(true);
      const {data: {session}, error} = await supabase.auth.signUp({
        email,
-       password
+       password,
+       options :{
+          data: {
+            name
+          }
+       }
      });
 
      setLoading(false);
@@ -41,12 +46,7 @@ const Login=()=> {
      if(error){
       Alert.alert('Sign up',error.message)
      }
-    // setLoading(false);
-
-    // console.log('error: ',error);
-    // if(error) {
-    //   Alert.alert('Login', error.message)
-    // }
+    
     
   }
 
