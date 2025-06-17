@@ -1,7 +1,7 @@
-import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
-import {actions, RichEditor, RichToolbar } from 'react-native-pell-rich-editor'
+import { StyleSheet, Text, View } from 'react-native'
+import { actions, RichEditor, RichToolbar } from 'react-native-pell-rich-editor'
 import { theme } from '../constants/theme'
+
 
 const RichTextEditor = ({
   editorRef,
@@ -11,7 +11,6 @@ const RichTextEditor = ({
     <View style={{minHeight:285}}>
           <RichToolbar
           actions={[
-            actions.setStrikethrough,
             actions.setBold,
             actions.setItalic,
             actions.insertBulletsList,
@@ -29,10 +28,8 @@ const RichTextEditor = ({
             actions.heading4
           ]} 
           iconMap = {{
-            [actions.heading1]: ({tintColor}) =>
-              <Text style={{color: tintColor}}>H1</Text>,
-            [actions.heading1]: ({tintColor}) =>
-              <Text style={{color: tintColor}}>H4</Text>
+            [actions.heading1]: ({tintColor}) => <Text style={{color: tintColor}}>H1</Text>,
+            [actions.heading4]: ({tintColor}) => <Text style={{color: tintColor}}>H4</Text>    
           }}
           style={styles.richBar}
           flatContainerStyle={styles.flatStyle}
@@ -41,11 +38,11 @@ const RichTextEditor = ({
           disabled={false}
           />
           <RichEditor
-          re={editorRef}
-          containerStyle={styles.rich}
-          editorStyle={styles.containerStyle}
-          placeholder={"What's on your mind?"}
-          onChange={onChange}/>
+            ref={editorRef}
+            containerStyle={styles.rich}
+            editorStyle={styles.contentStyle}
+            placeholder={"What's on your mind?"}
+            onChange={onChange}/>
     </View>
   )
 }
