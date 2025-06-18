@@ -1,6 +1,7 @@
 import { Stack, useRouter } from 'expo-router'
 
 import { useEffect } from 'react'
+import { LogBox } from 'react-native'
 import { AuthProvider, useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
 import { getUserdata } from '../services/userService'
@@ -8,7 +9,7 @@ import { getUserdata } from '../services/userService'
 
 
 
-// LogBox.ignoreLogs(['Warning: TNodeChildrenRenderer', 'Warning: MemoizedTNodeRenderer','Warning: TRenderEngineProvider'])
+ LogBox.ignoreLogs(['Warning: TNodeChildrenRenderer', 'Warning: MemoizedTNodeRenderer','Warning: TRenderEngineProvider'])
 const _layout = ()=> {
   return (
     <AuthProvider>

@@ -1,126 +1,146 @@
-import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native'
-import { theme } from '../constants/theme'
-import Avatar from './Avatar'
-import { hp , wp } from '../helpers/common'
-import moment from 'moment'
-import Icon from '../assets/icons'
+import { Video } from 'expo-av';
+import { Image } from 'expo-image';
+import moment from 'moment';
+import { useEffect, useState } from 'react';
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import RenderHtml from 'react-native-render-html';
-import { Image } from 'expo-image'
-import { getSupabseFileUrl } from '../services/imageService'
-import { Video } from 'expo-av'
-import { createPostLike } from '../services/PostService'
+import Icon from '../assets/icons';
+import { theme } from '../constants/theme';
+import { hp, wp } from '../helpers/common';
+import { getSupabseFileUrl } from '../services/imageService';
+import { createPostLike } from '../services/postService';
+import Avatar from './Avatar';
 
-const textStyle = {
-  colors: theme.colors.dark,
-  fontSize: hp(1.75)
-};
+ const textStyle = {
+   color: theme.colors.dark,
+   fontSize: hp(1.75)
+ };
 
-const tagStyles = {
-  div: textStyle,
-  p: textStyle,
-  ol: textStyle,
-  h1: {
-    color: theme.colors.dark
-  },
-  h4:{
-      color: theme.colors.dark
+ const tagsStyles = {
+   div: textStyle,
+   p: textStyle,
+   ol: textStyle,
+   h1: {
+     color: theme.colors.dark
+   },
+   h4:{
+       color: theme.colors.dark
 
   }
-}
+ }
 
-const PostCard = ({
-  item,
-  currentUser,
-  router,
-  hasShadow = true,
-}) => {
-    const shadowStyles = {
-      shadowOffset: {
-        width:0,
-        height:2
-      },
-      shadowOpacity: 0.06,
-      shadowRadius: 6,
-      elevation: 1
-    }
+ const PostCard = ({
+   item,
+   currentUser,
+   router,
+   hasShadow = true,
+ }) => {
+     const shadowStyles = {
+       shadowOffset: {
+         width:0,
+         height:2
+       },
+       shadowOpacity: 0.06,
+       shadowRadius: 6,
+       elevation: 1
+     }
     
-    const[likes, setLikes] = useState([]);
+//     const[likes, setLikes] = useState([]);
 
 
-    useEffect(()=>{
+//     useEffect(()=>{
       
-    },[])
+//     },[])
 
-    const openPostDetails = () =>{
-      //later
-    }
-
-    const onLike = async()=>{
-      if(liked){
-        //remove like
-        let updateLikes= likes.filter(like=> like.userId!=currentUser?.id);
-        setLikes([...likes])
-        let res = await removePostLike(item?.id, currentUser?.id);
-        console.log('removed like ',res);
-        if(!res.success){
-          Alert.alert('Post', 'Something Went Wrong');
-        }
-      }else {
-        //create like
-        let data= {
-          userId: currentuser?.id,
+//     const openPostDetails = () =>{
+//       //later
+//     }
+const onLike = async()=>{
+ let data= {
+          userId: currentUser?.id,
           postId: item?.id
         }
-        setLikes([...likes, data])
         let res = await createPostLike(data);
-        console.log('added like',res);
+        console.log('res: ',res);
         if(!res.success){
           Alert.alert('Post', 'Something Went Wrong');
         }
-      }
+}
+//     const onLike = async()=>{
+//       if(liked){
+//         //remove like
+//         let updateLikes= likes.filter(like=> like.userId!=currentUser?.id);
+//         setLikes([...likes])
+//         let res = await removePostLike(item?.id, currentUser?.id);
+//         console.log('removed like ',res);
+//         if(!res.success){
+//           Alert.alert('Post', 'Something Went Wrong');
+//         }
+//       }else {
+//         //create like
+//         let data= {
+//           userId: currentuser?.id,
+//           postId: item?.id
+//         }
+//         setLikes([...likes, data])
+//         let res = await createPostLike(data);
+//         console.log('added like',res);
+//         if(!res.success){
+//           Alert.alert('Post', 'Something Went Wrong');
+//         }
+//       }
       
       
-    }
+//     }
 
-  const createdAt= moment(item?.created_at).format('MMM D');
+   const createdAt= moment(item?.created_at).format('MMM D');
+    const liked = likes.filter(like=> like.userId==currentUser?.id) [0]? true: false;
 
-  const liked = likes.filter(like=> like.userid==currentUser?.id) 
-  [0]? true: false;
 
+    const [likes, setLikes] = useState([]);
+    useEffect(()=>{
+        setLikes(item?.postLikes)
+    },[])
+  
+  const openPostDetails =() =>{
+    //later
+  }
 
   return (
-    <View style={[styles.container, hasShadow && shadowStyles]}>
-      <View style={styles.header}>
-        {/*user info and post time */}
-        <View style={styles.userInfo}>
-        <Avatar
-        size={hp(4.5)}
-        uri={item?.user?.image}
-        rounded={theme.radius.md} />
-        <View style={{gap: 2}}>
-          <Text style={styles.username}>{item?.user?.name}</Text>
-          <Text style={styles.postTime}>{createdAt}</Text>
-        </View>
-        </View>
+  
+     <View style={[styles.container, hasShadow && shadowStyles]}>
 
-        <TouchableOpacity onPress={openPostDetails}>
-          <Icon name="threeDotsHorizontal" size={hp(3.4)} strokeWidth ={3} colors={theme.colors.text} />
-        </TouchableOpacity>
-      </View>
-      {/*post body & media*/}
-      <View style={styles.content}>
-        <View style={styles.postBody}>
-          {
-            item?.body && (
-              <RenderHtml
-                contentWidth={wp(100)}
-                source={{html: item?.body}} 
-                tagStyles={tagStyles}
-                />
-            )
-          }
+       <View style={styles.header}>
+         {/*user info and post time */}
+         <View style={styles.userInfo}>
+         <Avatar
+         size={hp(4.5)}
+         uri={item?.user?.image}
+         rounded={theme.radius.md} />
+        <View style={{gap: 2}}>
+            <Text style={styles.username}>{item?.user?.name}</Text>
+            <Text style={styles.postTime}>{createdAt}</Text>
+          </View>
+         
+         </View>
+              <TouchableOpacity onPress={openPostDetails}>
+           <Icon name="threeDotsHorizontal" size={hp(3.4)} strokeWidth ={3} colors={theme.colors.text} />
+         </TouchableOpacity>
         </View>
+           {/*post body & media*/}
+        <View style={styles.content}>
+           <View style={styles.postBody}>
+           {
+             item?.body && (
+               <RenderHtml
+                 contentWidth={wp(100)}
+                 source={{html: item?.body}} 
+                 tagsStyles={tagsStyles}
+                 />
+             )
+           }
+         </View>
+
           {/*post image */}
         {
           item?.file && item?.file?.includes('postImages') && (
@@ -132,7 +152,6 @@ const PostCard = ({
               />
           )
         }
-
         {/* post video */}
         {
           item?.file&& item?.file?.includes('postVideos') && (
@@ -145,9 +164,7 @@ const PostCard = ({
               />
           )
         }
-      </View>
-
-      {/*like, comment, share */}
+          {/*like, comment, share */}
       <View style={styles.footer}>
       <View style={styles.footerButton}>
         <TouchableOpacity onPress={onLike}>
@@ -180,7 +197,8 @@ const PostCard = ({
 
 
       </View>
-    </View>
+        </View>
+     </View>
   )
 }
 
@@ -228,5 +246,26 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 18,
+  },
+  postBody: {
+    marginLeft:5
+  },
+  content: {
+    gap: 10,
+    //marginBottom: 10,
+  },
+  postTime: {
+    fontSize: hp(1.4),
+    color: theme.colors.textLight,
+    fontWeight: theme.fonts.medium,
+  },
+  username: {
+    fontSize: hp(1.7),
+    color: theme.colors.textDark,
+    fontWeight: theme.fonts.medium,
+  },
+  userInfo: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   },
 })
