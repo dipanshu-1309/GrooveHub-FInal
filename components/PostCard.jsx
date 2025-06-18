@@ -2,14 +2,15 @@ import { Video } from 'expo-av';
 import { Image } from 'expo-image';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Share, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import RenderHtml from 'react-native-render-html';
 import Icon from '../assets/icons';
 import { theme } from '../constants/theme';
-import { hp, wp } from '../helpers/common';
-import { getSupabseFileUrl } from '../services/imageService';
-import { createPostLike } from '../services/postService';
+import { hp, stripHtmlTags, wp } from '../helpers/common';
+import { downloadFile, getSupabseFileUrl } from '../services/imageService';
+import { createPostLike, removePostLike } from '../services/postService';
 import Avatar from './Avatar';
+import Loading from './Loading';
 
  const textStyle = {
    color: theme.colors.dark,
@@ -44,67 +45,61 @@ import Avatar from './Avatar';
        shadowRadius: 6,
        elevation: 1
      }
-    
-//     const[likes, setLikes] = useState([]);
 
+      const [likes, setLikes] = useState([]);
+      const[loading,setLoading]= useState(false);
+      useEffect(()=>{
+        setLikes(item?.postLikes);
+       },[])
+       
+        const openPostDetails =() =>{
+    router.push({pathname: 'postDetails', params: {postId: item?.id}})
+      }
 
-//     useEffect(()=>{
-      
-//     },[])
-
-//     const openPostDetails = () =>{
-//       //later
-//     }
 const onLike = async()=>{
- let data= {
-          userId: currentUser?.id,
-          postId: item?.id
-        }
-        let res = await createPostLike(data);
-        console.log('res: ',res);
+  if(liked){
+    //remove the like
+        let updatedLikes = likes.filter(like=> like.userId!=currentUser?.id)
+        setLikes([...updatedLikes])
+        let res = await removePostLike(item?.id, currentUser?.id);
+        console.log('removed like: ',res);
         if(!res.success){
           Alert.alert('Post', 'Something Went Wrong');
         }
+  }
+  else {
+    //create the like
+    let data= {
+          userId: currentUser?.id,
+          postId: item?.id
+        }
+        setLikes([...likes, data])
+        let res = await createPostLike(data);
+        console.log('Added like: ',res);
+        if(!res.success){
+          Alert.alert('Post', 'Something Went Wrong');
+        }
+  }
+ 
 }
-//     const onLike = async()=>{
-//       if(liked){
-//         //remove like
-//         let updateLikes= likes.filter(like=> like.userId!=currentUser?.id);
-//         setLikes([...likes])
-//         let res = await removePostLike(item?.id, currentUser?.id);
-//         console.log('removed like ',res);
-//         if(!res.success){
-//           Alert.alert('Post', 'Something Went Wrong');
-//         }
-//       }else {
-//         //create like
-//         let data= {
-//           userId: currentuser?.id,
-//           postId: item?.id
-//         }
-//         setLikes([...likes, data])
-//         let res = await createPostLike(data);
-//         console.log('added like',res);
-//         if(!res.success){
-//           Alert.alert('Post', 'Something Went Wrong');
-//         }
-//       }
-      
-      
-//     }
+
+  const onShare= async()=>{
+    let content = {message: stripHtmlTags(item?.body)};
+    if(item?.file){
+      //download the file then share the local uri
+      setLoading(true);
+      let url = await downloadFile(getSupabseFileUrl(item?.file).uri);
+      setLoading(false);
+      content.url = url; 
+    }
+    Share.share(content);
+  }
+
+
 
    const createdAt= moment(item?.created_at).format('MMM D');
-    const liked = likes.filter(like=> like.userId==currentUser?.id) [0]? true: false;
-
-
-    const [likes, setLikes] = useState([]);
-    useEffect(()=>{
-        setLikes(item?.postLikes)
-    },[])
-  
-  const openPostDetails =() =>{
-    //later
-  }
+    const liked = likes.filter(like=> like.userId==currentUser?.id)
+    [0]? true: false; 
 
   return (
   
@@ -178,7 +173,7 @@ const onLike = async()=>{
       </View>
 
       <View style={styles.footerButton}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={openPostDetails}> 
           <Icon name="comment" size={24} color={ theme.colors.textLight} />
         </TouchableOpacity>
         <Text style={styles.count}>
@@ -189,10 +184,19 @@ const onLike = async()=>{
       </View>
 
       <View style={styles.footerButton}>
-        <TouchableOpacity>
+          {
+            loading? (
+              <Loading size="small"/>
+            ):(
+                    <TouchableOpacity onPress={onShare}>
           <Icon name="share" size={24} color={theme.colors.textLight} />
         </TouchableOpacity>
         
+            )
+          }
+
+
+  
       </View>
 
 

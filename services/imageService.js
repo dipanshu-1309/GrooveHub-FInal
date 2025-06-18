@@ -3,6 +3,8 @@ import * as FileSystem from 'expo-file-system';
 import { supabaseUrl } from '../constants';
 import { supabase } from '../lib/supabase';
 //import * as ImagePicker from 'expo-image-picker';
+
+
 export const getUserImageSrc = imagePath => {
   if(imagePath){
     return getSupabseFileUrl(imagePath);
@@ -17,6 +19,22 @@ export const getUserImageSrc = imagePath => {
   }
   return null;
   }
+
+  export const downloadFile = async(url)=>{
+    try{
+        const {uri} = await FileSystem.downloadAsync(url, getLocalFilePath(url))
+        return uri;
+    }catch(error){
+      return null;
+    }
+  }
+
+  export const getLocalFilePath = filePath =>{
+    let fileName = filePath.split('/').pop();
+    return `${FileSystem.documentDirectory}${fileName}`;
+  }
+
+
 
 export const uploadFile = async(folderName, fileUri, isImage=true)=> {
    try{

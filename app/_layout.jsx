@@ -60,10 +60,17 @@ updateUserData(session?.user, session?.user?.email);
     <Stack
       screenOptions={{
         headerShown: false
-      }
+      }    
 
       }
-    />
+    >
+    <Stack.Screen
+        name="(main)/postDetails"
+        options={{
+          presentation: 'modal'
+        }}
+        />
+        </Stack>
   )
 }
 
