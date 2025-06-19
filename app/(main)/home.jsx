@@ -38,8 +38,11 @@ const Home = () => {
        setPosts(prevPosts=>[newPost, ...prevPosts]);
      } 
 
-    if(payload.eventType=='DELETE'){
-
+    if(payload.eventType=='DELETE' && payload.old.id){
+      setPosts(prevPosts=>{
+        let updatedPosts= prevPosts.filter(post=> post.id!=payload.old.id);
+        return updatedPosts;
+      })
     }
   }
 
