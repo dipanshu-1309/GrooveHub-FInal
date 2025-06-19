@@ -35,6 +35,7 @@ import Loading from './Loading';
    currentUser,
    router,
    hasShadow = true,
+   showMoreIcon = true,
  }) => {
      const shadowStyles = {
        shadowOffset: {
@@ -53,7 +54,8 @@ import Loading from './Loading';
        },[])
        
         const openPostDetails =() =>{
-    router.push({pathname: 'postDetails', params: {postId: item?.id}})
+            if(!showMoreIcon) return null;
+             router.push({pathname: 'postDetails', params: {postId: item?.id}})
       }
 
 const onLike = async()=>{
@@ -118,9 +120,18 @@ const onLike = async()=>{
           </View>
          
          </View>
-              <TouchableOpacity onPress={openPostDetails}>
-           <Icon name="threeDotsHorizontal" size={hp(3.4)} strokeWidth ={3} colors={theme.colors.text} />
-         </TouchableOpacity>
+
+
+    {
+      showMoreIcon && (
+          <TouchableOpacity onPress={openPostDetails}>
+             <Icon name="threeDotsHorizontal" size={hp(3.4)} strokeWidth ={3} colors={theme.colors.text} />
+          </TouchableOpacity>
+      )
+    }
+
+
+              
         </View>
            {/*post body & media*/}
         <View style={styles.content}>
@@ -178,7 +189,7 @@ const onLike = async()=>{
         </TouchableOpacity>
         <Text style={styles.count}>
           {
-            0
+            item?.comments[0]?.count
           }
         </Text>
       </View>

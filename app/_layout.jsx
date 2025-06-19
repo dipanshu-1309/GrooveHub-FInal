@@ -5,7 +5,7 @@ import { LogBox } from 'react-native'
 import { AuthProvider, useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
 import { getUserdata } from '../services/userService'
-//import { getUserdata } from '../services/userService'
+
 
 
 
@@ -43,7 +43,7 @@ updateUserData(session?.user, session?.user?.email);
 
    setAuth(null);
   router.replace('/welcome');
-}
+} 
     
 
  })
@@ -75,3 +75,4 @@ updateUserData(session?.user, session?.user?.email);
 }
 
 export default _layout
+
