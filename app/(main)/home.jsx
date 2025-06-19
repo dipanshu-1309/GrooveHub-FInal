@@ -23,15 +23,24 @@ const Home = () => {
   
   const [posts, setPosts] = useState([]);
   const [hasMore, setHasMore] = useState(true);
+
   const handlePostEvent =async (payload) =>{
+    console.log('payload:', payload);
+    
+
      if(payload.eventType == 'INSERT' && payload?.new?.id){
        let newPost = {...payload.new};
        let res = await getUserdata(newPost.userId);
-       newPost.user = res.success? res.data: {};
+
+      newPost.postLikes = [];
+      newPost.comments = [{count: 0}]; 
+      newPost.user = res.success? res.data: {};
        setPosts(prevPosts=>[newPost, ...prevPosts]);
      } 
-    console.log('got post event', payload);
-    
+
+    if(payload.eventType=='DELETE'){
+
+    }
   }
 
 

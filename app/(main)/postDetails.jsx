@@ -10,7 +10,7 @@ import { theme } from '../../constants/theme';
 import { useAuth } from '../../contexts/AuthContext';
 import { hp, wp } from '../../helpers/common';
 import { supabase } from '../../lib/supabase';
-import { createComment, fetchPostDetails, removeComment } from '../../services/postService';
+import { createComment, fetchPostDetails, removeComment, removePost } from '../../services/postService';
 import { getUserdata } from '../../services/userService';
 
 
@@ -105,6 +105,22 @@ const  PostDetails =()=> {
       }
     }
 
+    const onDeletePost = async(item)=>{
+      let res = await removePost(post.id);
+      if(res.success){
+        router.back();
+      }
+      else{
+        Alert.alert('Post', res.msg);
+      }
+      
+    }
+
+    const onEditPost = async(item)=>{
+        console.log('edit post: ',item);
+    }
+
+
   if(startLoading){
     return (
       <View style={styles.center}>
@@ -132,6 +148,9 @@ const  PostDetails =()=> {
           router={router}
           hasShadow={false}
           showMoreIcon={false}
+          showDelete={true}
+          onDelete={onDeletePost}
+          onEdit={onEditPost}
           />
         
         {/*comment input*/}
