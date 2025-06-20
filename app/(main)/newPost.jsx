@@ -133,7 +133,7 @@ const NewPost =()=> {
             </View>
 
             <View style={styles.textEditor}>
-                <RichTextEditor eeditorRef={editorRef} onChange={body=> bodyRef.current = body}
+                <RichTextEditor editorRef={editorRef} onChange={body=> bodyRef.current = body}
                 />
             </View>
 

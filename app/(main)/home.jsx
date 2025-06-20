@@ -43,7 +43,7 @@ const Home = () => {
         let updatedPosts= prevPosts.filter(post=> post.id!=payload.old.id);
         return updatedPosts;
       })
-    }
+    } 
   }
 
 
