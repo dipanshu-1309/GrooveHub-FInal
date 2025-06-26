@@ -108,7 +108,7 @@ const  PostDetails =()=> {
     const onDeletePost = async(item)=>{
       let res = await removePost(post.id);
       if(res.success){
-        router.back();
+        router.replace({ pathname: 'home', params: { refresh: true } });
       }
       else{
         Alert.alert('Post', res.msg);

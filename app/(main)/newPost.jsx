@@ -100,7 +100,7 @@ const NewPost =()=> {
        setFile(null);
        bodyRef.current = '';
        editorRef.current?.setContentHTML('');
-       router.back();
+       router.replace({ pathname: 'home', params: { refresh: true } });
     }else{
        Alert.alert('Post',res.msg);
      }

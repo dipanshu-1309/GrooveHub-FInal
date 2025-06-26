@@ -1,5 +1,5 @@
-import { useRouter } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useCallback, useEffect, useState } from 'react';
 import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import Icon from '../../assets/icons';
 import Avatar from '../../components/Avatar';
@@ -15,8 +15,24 @@ import { supabase } from '../../lib/supabase';
 import { getUserdata } from '../../services/userService';
 
 
+import { useFocusEffect } from '@react-navigation/native';
+
+
 let limit = 0;
 const Home = () => {
+
+
+
+const { refresh } = useLocalSearchParams();
+
+useFocusEffect(
+  useCallback(() => {
+    if (refresh === 'true') {
+      fetchPosts(); 
+    }
+  }, [refresh])
+);
+
 
   const{user, setAuth} = useAuth();
   const router = useRouter();
