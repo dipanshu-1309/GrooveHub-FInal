@@ -14,7 +14,6 @@ import PostCard from '../../components/PostCard';
 import { supabase } from '../../lib/supabase';
 import { getUserdata } from '../../services/userService';
 
-
 import { useFocusEffect } from '@react-navigation/native';
 
 
@@ -81,7 +80,7 @@ useFocusEffect(
   const getPosts = async()=>{
     //call tha api here
     if(!hasMore) return null;
-    limit = limit + 4;
+    limit = limit + 10;
 
     console.log('fetching posts: ',limit);
     
@@ -100,8 +99,8 @@ useFocusEffect(
         <View style={styles.header}>
           <Text style={styles.title}>GrooveHub</Text>
           <View style={styles.icons}>
-            <Pressable onPress={()=>router.push('notifications')}>
-              <Icon name="heart" size={hp(3.2)} strokeWidth={2} color={theme.colors.text}/>
+            <Pressable onPress={()=>router.push('courses')}>
+              <Icon name="courses" size={hp(3.2)} strokeWidth={2} color={theme.colors.text}/>
             </Pressable>
             <Pressable onPress={()=>router.push('newPost')}>
               <Icon name="plus" size={hp(3.2)} strokeWidth={2} color={theme.colors.text}/>
